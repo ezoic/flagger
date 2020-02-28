@@ -16,6 +16,8 @@ func (factory Factory) Provider(
 		return newPrometheusProvider(provider, credentials)
 	case "datadog":
 		return newDatadogProvider(metricInterval, provider, credentials)
+	case "cloudwatch":
+		return newCloudWatchProvider(provider)
 	default:
 		return newPrometheusProvider(provider, credentials)
 	}
