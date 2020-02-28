@@ -24,7 +24,7 @@ func TestCrossoverObserver_GetRequestSuccessRate(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client, err := providers.NewPrometheusProvider(flaggerv1.MetricTemplateProvider{
+	client, err := providers.Factory{}.Provider("", flaggerv1.MetricTemplateProvider{
 		Type:      "prometheus",
 		Address:   ts.URL,
 		SecretRef: nil,
@@ -67,7 +67,7 @@ func TestCrossoverObserver_GetRequestDuration(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client, err := providers.NewPrometheusProvider(flaggerv1.MetricTemplateProvider{
+	client, err := providers.Factory{}.Provider("", flaggerv1.MetricTemplateProvider{
 		Type:      "prometheus",
 		Address:   ts.URL,
 		SecretRef: nil,

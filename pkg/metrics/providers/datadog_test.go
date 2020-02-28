@@ -25,7 +25,7 @@ func TestNewDatadogProvider(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	dp, err := NewDatadogProvider("100s", flaggerv1.MetricTemplateProvider{}, cs)
+	dp, err := newDatadogProvider("100s", flaggerv1.MetricTemplateProvider{}, cs)
 
 	if err != nil {
 		t.Fatal(err)
@@ -91,7 +91,7 @@ func TestDatadogProvider_RunQuery(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	dp, err := NewDatadogProvider("1m",
+	dp, err := newDatadogProvider("1m",
 		flaggerv1.MetricTemplateProvider{Address: ts.URL},
 		map[string][]byte{
 			datadogApplicationKeySecretKey: []byte(appKey),
@@ -134,7 +134,7 @@ func TestDatadogProvider_IsOnline(t *testing.T) {
 			}))
 			defer ts.Close()
 
-			dp, err := NewDatadogProvider("1m",
+			dp, err := newDatadogProvider("1m",
 				flaggerv1.MetricTemplateProvider{Address: ts.URL},
 				map[string][]byte{
 					datadogApplicationKeySecretKey: []byte(appKey),

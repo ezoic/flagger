@@ -15,8 +15,8 @@ import (
 	flaggerv1 "github.com/weaveworks/flagger/pkg/apis/flagger/v1beta1"
 )
 
-// PrometheusProvider executes promQL queries
-type PrometheusProvider struct {
+// prometheusProvider executes promQL queries
+type prometheusProvider struct {
 	timeout  time.Duration
 	url      url.URL
 	username string
@@ -34,16 +34,16 @@ type prometheusResponse struct {
 	}
 }
 
-// NewPrometheusProvider takes a provider spec and the credentials map,
+// newPrometheusProvider takes a provider spec and the credentials map,
 // validates the address, extracts the username and password values if provided and
 // returns a Prometheus client ready to execute queries against the API
-func NewPrometheusProvider(provider flaggerv1.MetricTemplateProvider, credentials map[string][]byte) (*PrometheusProvider, error) {
+func newPrometheusProvider(provider flaggerv1.MetricTemplateProvider, credentials map[string][]byte) (*prometheusProvider, error) {
 	promURL, err := url.Parse(provider.Address)
 	if err != nil {
 		return nil, fmt.Errorf("%s address %s is not a valid URL", provider.Type, provider.Address)
 	}
 
-	prom := PrometheusProvider{
+	prom := prometheusProvider{
 		timeout: 5 * time.Second,
 		url:     *promURL,
 	}
@@ -66,7 +66,7 @@ func NewPrometheusProvider(provider flaggerv1.MetricTemplateProvider, credential
 }
 
 // RunQuery executes the promQL query and returns the the first result as float64
-func (p *PrometheusProvider) RunQuery(query string) (float64, error) {
+func (p *prometheusProvider) RunQuery(query string) (float64, error) {
 	if p.url.String() == "fake" {
 		return 100, nil
 	}
@@ -133,7 +133,7 @@ func (p *PrometheusProvider) RunQuery(query string) (float64, error) {
 }
 
 // IsOnline calls the Prometheus status endpoint and returns an error if the API is unreachable
-func (p *PrometheusProvider) IsOnline() (bool, error) {
+func (p *prometheusProvider) IsOnline() (bool, error) {
 	u, err := url.Parse("./api/v1/status/flags")
 	if err != nil {
 		return false, err
@@ -173,7 +173,7 @@ func (p *PrometheusProvider) IsOnline() (bool, error) {
 }
 
 // trimQuery takes a promql query and removes whitespace
-func (p *PrometheusProvider) trimQuery(query string) string {
+func (p *prometheusProvider) trimQuery(query string) string {
 	space := regexp.MustCompile(`\s+`)
 	return space.ReplaceAllString(query, " ")
 }

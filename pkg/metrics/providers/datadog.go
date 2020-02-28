@@ -28,8 +28,8 @@ const (
 	datadogFromDeltaMultiplierOnMetricInterval = 10
 )
 
-// DatadogProvider executes datadog queries
-type DatadogProvider struct {
+// datadogProvider executes datadog queries
+type datadogProvider struct {
 	metricsQueryEndpoint     string
 	apiKeyValidationEndpoint string
 
@@ -45,18 +45,18 @@ type datadogResponse struct {
 	}
 }
 
-// NewDatadogProvider takes a canary spec, a provider spec and the credentials map, and
+// newDatadogProvider takes a canary spec, a provider spec and the credentials map, and
 // returns a Datadog client ready to execute queries against the API
-func NewDatadogProvider(metricInterval string,
+func newDatadogProvider(metricInterval string,
 	provider flaggerv1.MetricTemplateProvider,
-	credentials map[string][]byte) (*DatadogProvider, error) {
+	credentials map[string][]byte) (*datadogProvider, error) {
 
 	address := provider.Address
 	if address == "" {
 		address = datadogDefaultHost
 	}
 
-	dd := DatadogProvider{
+	dd := datadogProvider{
 		timeout:                  5 * time.Second,
 		metricsQueryEndpoint:     address + datadogMetricsQueryPath,
 		apiKeyValidationEndpoint: address + datadogAPIKeyValidationPath,
@@ -85,7 +85,7 @@ func NewDatadogProvider(metricInterval string,
 
 // RunQuery executes the datadog query against DatadogProvider.metricsQueryEndpoint
 // and returns the the first result as float64
-func (p *DatadogProvider) RunQuery(query string) (float64, error) {
+func (p *datadogProvider) RunQuery(query string) (float64, error) {
 
 	req, err := http.NewRequest("GET", p.metricsQueryEndpoint, nil)
 	if err != nil {
@@ -138,7 +138,7 @@ func (p *DatadogProvider) RunQuery(query string) (float64, error) {
 
 // IsOnline calls the Datadog's validation endpoint with api keys
 // and returns an error if the validation fails
-func (p *DatadogProvider) IsOnline() (bool, error) {
+func (p *datadogProvider) IsOnline() (bool, error) {
 	req, err := http.NewRequest("GET", p.apiKeyValidationEndpoint, nil)
 	if err != nil {
 		return false, fmt.Errorf("error http.NewRequest: %s", err.Error())

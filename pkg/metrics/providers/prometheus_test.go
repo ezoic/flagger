@@ -76,7 +76,7 @@ func TestNewPrometheusProvider(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	prom, err := NewPrometheusProvider(template.Spec.Provider, secret.Data)
+	prom, err := newPrometheusProvider(template.Spec.Provider, secret.Data)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -124,7 +124,7 @@ func TestPrometheusProvider_RunQueryWithBasicAuth(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	prom, err := NewPrometheusProvider(template.Spec.Provider, secret.Data)
+	prom, err := newPrometheusProvider(template.Spec.Provider, secret.Data)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -154,7 +154,7 @@ func TestPrometheusProvider_IsOnline(t *testing.T) {
 	template.Spec.Provider.Address = ts.URL
 	template.Spec.Provider.SecretRef = nil
 
-	prom, err := NewPrometheusProvider(template.Spec.Provider, nil)
+	prom, err := newPrometheusProvider(template.Spec.Provider, nil)
 	if err != nil {
 		t.Fatal(err.Error())
 	}

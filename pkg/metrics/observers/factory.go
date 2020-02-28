@@ -12,18 +12,15 @@ type Factory struct {
 }
 
 func NewFactory(metricsServer string) (*Factory, error) {
-	client, err := providers.NewPrometheusProvider(flaggerv1.MetricTemplateProvider{
+	client, err := providers.Factory{}.Provider("", flaggerv1.MetricTemplateProvider{
 		Type:      "prometheus",
 		Address:   metricsServer,
 		SecretRef: nil,
 	}, nil)
-	if err != nil {
-		return nil, err
-	}
 
 	return &Factory{
 		Client: client,
-	}, nil
+	}, err
 }
 
 func (factory Factory) Observer(provider string) Interface {
